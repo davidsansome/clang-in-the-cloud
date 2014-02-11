@@ -15,6 +15,9 @@ def main():
       help='a URL of a Clang-in-the-cloud service')
   parser.add_argument('--ref', default='origin/master',
       help='the git-ref to compare against')
+  parser.add_argument('--extension', action='append', metavar='EXT',
+      default=['cc', 'cpp', 'h', 'c', 'cxx'],
+      help='file extensions to reformat')
   parser.add_argument('-i', dest='inplace', action='store_true',
       help='edit files inplace instead of showing a diff')
   args = parser.parse_args()
@@ -28,7 +31,11 @@ def main():
     print >> sys.stderr, "No changes from %s" % args.ref
     return
 
+
   for filename in changed_files:
+    if not os.path.splitext(filename)[1][1:] in args.extension:
+      continue
+
     path = os.path.join(root_dir, filename)
     original = open(path).read()
     response = urllib2.urlopen(args.url, original)
