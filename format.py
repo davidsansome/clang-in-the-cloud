@@ -22,15 +22,20 @@ def main():
       help='edit files inplace instead of showing a diff')
   args = parser.parse_args()
 
-  root_dir = subprocess.check_output([
-      "git", "rev-parse", "--show-toplevel"]).strip()
-  changed_files = subprocess.check_output([
-      "git", "diff-index", args.ref, "--name-only"]).splitlines()
-
-  if not changed_files:
-    print >> sys.stderr, "No changes from %s" % args.ref
+  try:
+    root_dir = subprocess.check_output([
+        'git', 'rev-parse', '--show-toplevel']).strip()
+  except subprocess.CalledProcessError:
+    # Probably we were not called from a git working directory, just ignore this
+    # error.
     return
 
+  changed_files = subprocess.check_output([
+      'git', 'diff-index', args.ref, '--name-only']).splitlines()
+
+  if not changed_files:
+    print >> sys.stderr, 'No changes from %s' % args.ref
+    return
 
   for filename in changed_files:
     if not os.path.splitext(filename)[1][1:] in args.extension:
@@ -42,12 +47,12 @@ def main():
     formatted = response.read()
 
     if original == formatted:
-      print >> sys.stderr, "%s: no changes" % filename
+      print >> sys.stderr, '%s: formatting is correct!' % filename
       continue
 
     diff = difflib.unified_diff(
         original.split('\n'), formatted.split('\n'),
-        os.path.join("a", filename), os.path.join("b", filename),
+        os.path.join('a', filename), os.path.join('b', filename),
         lineterm='')
 
     if args.inplace:
@@ -62,5 +67,5 @@ def main():
       print '\n'.join(diff)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   main()
