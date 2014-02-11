@@ -16,7 +16,7 @@ def main():
   parser.add_argument('--ref', default='origin/master',
       help='the git-ref to compare against')
   parser.add_argument('--extension', action='append', metavar='EXT',
-      default=['cc', 'cpp', 'h', 'c', 'cxx'],
+      default=['cc', 'cpp', 'h', 'c', 'cxx', 'm', 'mm'],
       help='file extensions to reformat')
   parser.add_argument('-i', dest='inplace', action='store_true',
       help='edit files inplace instead of showing a diff')
