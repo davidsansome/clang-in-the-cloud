@@ -16,7 +16,7 @@ var (
 	clang_format = flag.String("clang-format", "clang-format",
 		"Path to the clang-format executable to use")
 	style = flag.String("style",
-		"{BasedOnStyle: Google, DerivePointerBinding: false}",
+		"{BasedOnStyle: Google, DerivePointerBinding: false, Standard: Cpp11}",
 		"Style specification passed to clang-format")
 )
 
